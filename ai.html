@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Popup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+        }
+        .chat-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .chat-message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background: #007bff;
+            color: white;
+            margin-left: 20%;
+            margin-right: 5px;
+        }
+        .ai-message {
+            background: #f1f1f1;
+            margin-right: 20%;
+            margin-left: 5px;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .chat-input button {
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="chat-toggle" onclick="toggleChat()">Chat with AI</button>
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <span>AI Assistant</span>
+            <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer;">✖</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message ai-message">Hello! How can I assist you today?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            const chatToggle = document.querySelector('.chat-toggle');
+            chatContainer.style.display = chatContainer.style.display === 'none' ? 'flex' : 'none';
+            chatToggle.style.display = chatContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const chatBody = document.getElementById('chatBody');
+            const message = userInput.value.trim();
+
+            if (message) {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'chat-message user-message';
+                userMessage.textContent = message;
+                chatBody.appendChild(userMessage);
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'chat-message ai-message';
+                    aiMessage.textContent = getAIResponse(message);
+                    chatBody.appendChild(aiMessage);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 500);
+
+                // Clear input
+                userInput.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }
+
+        function getAIResponse(userMessage) {
+            // Simple AI response logic (can be replaced with API call)
+            const responses = [
+                "That's interesting! Tell me more.",
+                "Got it! How can I help you further?",
+                "Hmm, let me think... Okay, what's next?",
+                "Nice one! What's on your mind now?"
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Send message on Enter key
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
